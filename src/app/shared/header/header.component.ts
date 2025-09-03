@@ -1,25 +1,37 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-username: string = 'Guest';
+ private readonly _authService = inject(AuthService);
 
-  constructor(private _authService: AuthService, private _router: Router) {
+  username: string = 'Guest';
+
+  constructor() {
     const decoded = this._authService.getDecodedToken();
-    this.username = decoded?.DisplayName || 'Guest';
+
+    if (decoded) {
+      this.username = decoded.displayName || decoded.username || 'Guest';
+
+      const roleClaim =
+        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+      const role = decoded[roleClaim];
+
+      if (role) {
+        localStorage.setItem('role', role);
+      }
+    }
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this._router.navigate(['/']);
+    this._authService.logout();
   }
 }

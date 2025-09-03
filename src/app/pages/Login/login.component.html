@@ -1,17 +1,49 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-4">
+    <div class="col-md-5 col-lg-4 shadow p-4 rounded bg-light">
       <h2 class="text-center mb-4">Login</h2>
-      <form (ngSubmit)="login()">
+      <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
         <div class="mb-3">
-          <label for="username">Username</label>
-          <input type="text" class="form-control" id="username" [(ngModel)]="username" name="username" required />
+          <label for="username" class="form-label">Username</label>
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            formControlName="username"
+            [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+          />
+          <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="invalid-feedback">
+            <div *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</div>
+            <div *ngIf="loginForm.get('username')?.errors?.['minlength']">
+              Username must be at least 3 characters.
+            </div>
+          </div>
         </div>
+
         <div class="mb-3">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required />
+          <label for="password" class="form-label">Password</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="invalid-feedback">
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</div>
+            <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
+              Password must be at least 6 characters.
+            </div>
+          </div>
         </div>
-        <button class="btn btn-primary w-100" type="submit">Login</button>
+
+        <button
+          type="submit"
+          class="btn btn-primary w-100"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
       </form>
     </div>
   </div>
