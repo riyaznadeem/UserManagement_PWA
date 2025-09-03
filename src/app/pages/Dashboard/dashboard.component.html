@@ -1,4 +1,12 @@
-<div class="container mt-5">
+<div class="container mt-5" style="text-align: center;">
   <h1>{{t('dashboard.welcome')}}, {{ username }}</h1>
-  <p>{{t('dashboard.message')}}</p>
+  <p>
+  {{
+    getRole === 'Admin'
+      ? t('dashboard.adminMessage')
+      : getRole === 'User'
+      ? t('dashboard.userMessage')
+      : t('dashboard.readOnlyMessage')
+  }}
+</p>
 </div>

@@ -14,7 +14,7 @@ export class UserService {
   }
 
     getRoleList() {
-    return this._http.get<any>(`${this._baseUrl}/GetRoleLookup`);
+    return this._http.get<any>(`${environment.apiUrl}/api/Role/GetRoleLookup`);
   }
 
    createUser(user: any) {

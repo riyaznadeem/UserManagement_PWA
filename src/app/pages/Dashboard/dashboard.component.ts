@@ -19,6 +19,7 @@ export class DashboardComponent {
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
   private readonly language = inject(LanguageService);
+  public getRole = localStorage.getItem('role');
 
   constructor() {
     const decoded = this._authService.getDecodedToken();
