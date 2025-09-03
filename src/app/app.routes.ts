@@ -12,5 +12,6 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [authGuard],
   },
-  { path: 'usermanagement', component: UserManagementComponent, canActivate: [authGuard] },
+  { path: 'user-management', component: UserManagementComponent, canActivate: [authGuard] },
+   { path: '**', redirectTo: 'login' }
 ];

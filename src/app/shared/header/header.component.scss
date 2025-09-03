@@ -1,3 +1,58 @@
 .navbar {
   height: 60px;
 }
+.app-layout {
+  height: 100vh;
+  background-color: #f8f9fc;
+
+  .sidebar {
+    width: 220px;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+
+    .logo-box {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(to bottom right, #3b82f6, #6366f1);
+      border-radius: 8px;
+    }
+
+    .nav-link {
+      padding: 0.5rem 0.75rem;
+      color: #6b7280;
+      border-radius: 6px;
+      font-weight: 500;
+
+      &:hover {
+        background-color: #f3f4f6;
+        color: #1f2937;
+      }
+
+      &.active {
+        background: linear-gradient(to right, #e0f2fe, #ede9fe);
+        color: #2563eb;
+        border-right: 3px solid #2563eb;
+      }
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .main-content {
+    background-color: #f9fafb;
+
+    .topbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .user-initials {
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+}

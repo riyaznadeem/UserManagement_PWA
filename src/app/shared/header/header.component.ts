@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-header',
@@ -12,14 +13,15 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent {
  private readonly _authService = inject(AuthService);
-
-  username: string = 'Guest';
+  _languageService = inject(LanguageService);
+  router = inject(Router);
+  username: string = '';
 
   constructor() {
     const decoded = this._authService.getDecodedToken();
 
     if (decoded) {
-      this.username = decoded.displayName || decoded.username || 'Guest';
+      this.username = decoded.DisplayName ;
 
       const roleClaim =
         'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
@@ -31,7 +33,28 @@ export class HeaderComponent {
     }
   }
 
+   get user() {
+    return this.username;
+  }
+  get initials(): string {
+    return this.username
+      ?.split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  }
   logout() {
     this._authService.logout();
+  }
+
+    t(key: string): string {
+    return this._languageService.translate(key);
+  }
+
+  toggleLanguage() {
+    this._languageService.toggleLanguage();
+  }
+    get languageLabel() {
+    return this._languageService.language.code === 'en' ? 'عربي' : 'EN';
   }
 }

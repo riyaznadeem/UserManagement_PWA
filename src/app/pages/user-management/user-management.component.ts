@@ -1,20 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule,ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
 })
 export class UserManagementComponent {
   private readonly _userService = inject(UserService);
   private readonly _toast = inject(ToastService);
- private readonly _formBuilder = inject(FormBuilder);
+  private readonly _formBuilder = inject(FormBuilder);
+  private readonly language = inject(LanguageService);
+
   users: any[] = [];
   roles: any[] = [];
   userForm!: FormGroup;
@@ -42,10 +51,19 @@ export class UserManagementComponent {
 
   initForm(user: any = null) {
     this.userForm = this._formBuilder.group({
-      username: [{ value: user?.username || '', disabled: this.accessRole !== 'Admin' }, Validators.required],
+      username: [
+        { value: user?.username || '', disabled: this.accessRole !== 'Admin' },
+        Validators.required,
+      ],
       displayName: [user?.displayName || '', Validators.required],
-      password: [user?.password || '', this.isEditMode ? [] : Validators.required],
-      roleId: [{ value: user?.roleId || '', disabled: this.accessRole !== 'Admin' }, Validators.required],
+      password: [
+        user?.password || '',
+        this.isEditMode ? [] : Validators.required,
+      ],
+      roleId: [
+        { value: user?.roleId || '', disabled: this.accessRole !== 'Admin' },
+        Validators.required,
+      ],
     });
   }
 
@@ -133,21 +151,28 @@ export class UserManagementComponent {
 
     if (this.isEditMode) {
       if (this.accessRole === 'Admin') {
-        // assuming you have user id somewhere, maybe formValue includes it or you can pass it separately
         this._userService.updateUser(formValue).subscribe({
-          next: () => this.afterSave('User updated successfully'),
-          error: () => this.toastError('Update failed'),
+          next: () =>
+            this.afterSave(this.translate('userManagement.userUpdated')),
+          error: () =>
+            this.toastError(this.translate('userManagement.updateFailed')),
         });
       } else if (this.accessRole === 'User') {
-        this._userService.updateOwn({ displayName: formValue.displayName }).subscribe({
-          next: () => this.afterSave('Profile updated'),
-          error: () => this.toastError('Update failed'),
-        });
+        this._userService
+          .updateOwn({ displayName: formValue.displayName })
+          .subscribe({
+            next: () =>
+              this.afterSave(this.translate('userManagement.profileUpdated')),
+            error: () =>
+              this.toastError(this.translate('userManagement.updateFailed')),
+          });
       }
     } else {
       this._userService.createUser(formValue).subscribe({
-        next: () => this.afterSave('User created successfully'),
-        error: () => this.toastError('Creation failed'),
+        next: () =>
+          this.afterSave(this.translate('userManagement.userCreated')),
+        error: () =>
+          this.toastError(this.translate('userManagement.creationFailed')),
       });
     }
   }
@@ -178,15 +203,27 @@ export class UserManagementComponent {
   }
 
   confirmDeleteUser(user: any) {
-    if (confirm(`Are you sure you want to delete ${user.username}?`)) {
+    if (
+      confirm(
+        this.translate('userManagement.confirmDelete').replace(
+          '{username}',
+          user.username
+        )
+      )
+    ) {
       this._userService.deleteUser(user.id).subscribe({
         next: () => {
-          this._toast.show('Delete success!');
+          this._toast.show(this.translate('userManagement.deleteSuccess'));
           this.refreshData();
         },
-        error: () => this.toastError('Delete failed'),
+        error: () =>
+          this.toastError(this.translate('userManagement.deleteFailed')),
       });
     }
+  }
+
+  get translate() {
+    return this.language.translate.bind(this.language);
   }
 }
 declare var bootstrap: any;
