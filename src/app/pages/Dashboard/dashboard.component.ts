@@ -20,7 +20,7 @@ export class DashboardComponent {
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
   private readonly language = inject(LanguageService);
-  public getRole = localStorage.getItem('role');
+  public getRole! :any;
   public dashboardCount: any;
 
   constructor() {
@@ -32,14 +32,11 @@ export class DashboardComponent {
     this._userService.getDashboard().subscribe((res) => {
       this.dashboardCount = res;
     });
+     this.getRole = localStorage.getItem('role');
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this._toast.show('You have been logged out.', {
-      classname: 'bg-warning text-dark',
-    });
-    this._router.navigate(['/']);
+   this._authService.logout();
   }
 
   get translate() {

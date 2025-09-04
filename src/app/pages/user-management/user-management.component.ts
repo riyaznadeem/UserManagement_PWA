@@ -173,7 +173,7 @@ export class UserManagementComponent {
         });
       } else if (this.accessRole === 'User') {
         this._userService
-          .updateOwn({ displayName: formValue.displayName })
+          .updateOwn({ id :formValue.id,displayName: formValue.displayName })
           .subscribe({
             next: () =>
               this.afterSave(this.translate('userManagement.profileUpdated')),
