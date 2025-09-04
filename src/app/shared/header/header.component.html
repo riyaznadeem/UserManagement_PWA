@@ -1,5 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
-  <a class="navbar-brand fw-bold text-white">{{ t('app.title') }}</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 shadow-colored">
+  <a class="navbar-brand d-flex align-items-center fw-bold text-white" routerLink="/dashboard">
+    <!-- Bootstrap icon example, you can change it to any icon you like -->
+    <i class="bi bi-app-indicator me-2" style="font-size: 1.5rem;"></i>
+    <span>{{ t('app.title') }}</span>
+  </a>
 
   <button
     class="navbar-toggler"
@@ -23,12 +27,26 @@
     </ul>
 
     <div class="d-flex align-items-center">
-      <header class="topbar d-flex justify-content-between align-items-center px-4 py-3 shadow-sm">
+      <header class="topbar d-flex justify-content-between align-items-center px-4 py-3 shadow-sm shadow-colored">
         <div></div>
         <div class="d-flex align-items-center gap-3">
           <button class="btn btn-light btn-sm" (click)="toggleLanguage()">🌐 {{ languageLabel }}</button>
-          <div class="user-initials bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
-            <button class="btn btn-outline-light btn-sm" (click)="logout()">{{ initials }} {{ t('nav.logout') }}</button>
+
+          <div
+            class="rounded-circle text-white d-flex align-items-center justify-content-center fw-bold"
+            style="width: 36px; height: 36px; background: linear-gradient(135deg, #3a7bd5, #00d2ff); box-shadow: 0 0 0 2px #e0e0e0;">
+            {{ initials }}
+          </div>
+
+          <div
+            class="rounded-circle d-flex align-items-center justify-content-center"
+            style="width: 36px; height: 36px; background: linear-gradient(135deg, #3a7bd5, #00d2ff); box-shadow: 0 0 0 2px #e0e0e0;">
+            <button
+              class="btn btn-sm text-white d-flex align-items-center justify-content-center p-0"
+              style="width: 100%; height: 100%; border: none; background: transparent;"
+              (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i>
+            </button>
           </div>
         </div>
       </header>

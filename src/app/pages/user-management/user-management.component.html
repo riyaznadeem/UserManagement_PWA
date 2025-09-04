@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container-fluid mt-4">
   <h2>{{ translate('userManagement.title') }}</h2>
 
   <div class="row mb-3">
@@ -18,77 +18,79 @@
 
     <!-- Search Button -->
     <div class="col-md-2">
-      <button class="btn btn-primary w-100" (click)="onSearch()">
+      <button class="btn btn-primary w-100 shadow-sm fw-semibold rounded-3" (click)="onSearch()">
         {{ translate('userManagement.search') }}
       </button>
     </div>
 
     <!-- Add Button (Admin Only) -->
     <div class="col-md-2" *ngIf="accessRole === 'Admin'">
-      <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#addEditUserModal"
-        (click)="openAddUser()">
+      <button type="button" class="btn btn-success w-100 shadow-sm fw-semibold rounded-3" data-bs-toggle="modal"
+        data-bs-target="#addEditUserModal" (click)="openAddUser()">
         {{ translate('userManagement.addUser') }}
       </button>
     </div>
   </div>
 
-  <!-- User Table -->
-  <table class="table table-bordered table-hover mt-3">
-    <thead class="table-primary">
-      <tr>
-        <th (click)="onSort('Username')" style="cursor:pointer">
-          {{ translate('userManagement.username') }}
-          <i class="bi" *ngIf="sortBy === 'Username'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
-        </th>
-        <th (click)="onSort('DisplayName')" style="cursor:pointer">
-          {{ translate('userManagement.displayName') }}
-          <i class="bi" *ngIf="sortBy === 'DisplayName'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
-        </th>
-        <th (click)="onSort('RoleName')" style="cursor:pointer">
-          {{ translate('userManagement.role') }}
-          <i class="bi" *ngIf="sortBy === 'RoleName'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
-        </th>
-        <th *ngIf="accessRole === 'Admin' || accessRole === 'User'">{{ translate('userManagement.action') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.username }}</td>
-        <td>{{ user.displayName }}</td>
-        <td>{{ user.roleName }}</td>
-        <td *ngIf="accessRole === 'Admin' || accessRole === 'User'">
-          <!-- Edit Button -->
-          <span class="d-inline-block" tabindex="0" style="pointer-events: auto;"
-            [attr.title]="!canEditUser(user) ? translate('userManagement.cannotEditSelf') : translate('userManagement.edit')">
-            <button [disabled]="!canEditUser(user)" class="btn btn-sm btn-info me-2" data-bs-toggle="modal"
-              data-bs-target="#addEditUserModal" (click)="openEditUser(user)"
-              [ngStyle]="{ 'pointer-events': canEditUser(user) ? 'auto' : 'none' }">
-              <i class="bi bi-pencil-fill"></i> {{ translate('userManagement.edit') }}
+  <div class="table-responsive">
+    <!-- User Table -->
+    <table class="table table-bordered table-hover mt-3">
+      <thead class="table-primary">
+        <tr>
+          <th (click)="onSort('Username')" style="cursor:pointer">
+            {{ translate('userManagement.username') }}
+            <i class="bi ms-1" *ngIf="sortBy === 'Username'"
+              [ngClass]="sortDirection === 'asc' ? 'bi-sort-up' : 'bi-sort-down'"></i>
+          </th>
+          <th (click)="onSort('DisplayName')" style="cursor:pointer">
+            {{ translate('userManagement.displayName') }}
+            <i class="bi ms-1" *ngIf="sortBy === 'DisplayName'"
+              [ngClass]="sortDirection === 'asc' ? 'bi-sort-up' : 'bi-sort-down'"></i>
+          </th>
+          <th (click)="onSort('RoleName')" style="cursor:pointer">
+            {{ translate('userManagement.role') }}
+            <i class="bi ms-1" *ngIf="sortBy === 'RoleName'"
+              [ngClass]="sortDirection === 'asc' ? 'bi-sort-up' : 'bi-sort-down'"></i>
+          </th>
+          <th *ngIf="accessRole === 'Admin' || accessRole === 'User'">{{ translate('userManagement.action') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.username }}</td>
+          <td>{{ user.displayName }}</td>
+          <td>{{ user.roleName }}</td>
+          <td *ngIf="accessRole === 'Admin' || accessRole === 'User'">
+            <!-- Edit Button -->
+            <span class="d-inline-block" tabindex="0" style="pointer-events: auto;"
+              [attr.title]="!canEditUser(user) ? translate('userManagement.cannotEditSelf') : translate('userManagement.edit')">
+              <button [disabled]="!canEditUser(user)" class="btn btn-info btn-sm me-2 shadow-sm fw-semibold rounded-3"
+                data-bs-toggle="modal" data-bs-target="#addEditUserModal" (click)="openEditUser(user)"
+                [ngStyle]="{ 'pointer-events': canEditUser(user) ? 'auto' : 'none' }">
+                <i class="bi bi-pencil-fill"></i> {{ translate('userManagement.edit') }}
+              </button>
+            </span>
+
+            &nbsp;&nbsp;
+            <!-- Delete Button (Admin Only) -->
+            <button *ngIf="accessRole === 'Admin'" class="btn btn-danger btn-sm shadow-sm fw-semibold rounded-3"
+              (click)="confirmDeleteUser(user)" title="{{ translate('userManagement.delete') }}">
+              <i class="bi bi-trash-fill"></i> {{ translate('userManagement.delete') }}
             </button>
-          </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-          &nbsp;&nbsp;
-          <!-- Delete Button (Admin Only) -->
-          <button *ngIf="accessRole === 'Admin'" class="btn btn-sm btn-danger" (click)="confirmDeleteUser(user)"
-            title="{{ translate('userManagement.delete') }}">
-            <i class="bi bi-trash-fill"></i> {{ translate('userManagement.delete') }}
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Pagination -->
-  <app-pagination [currentPage]="pageNumber" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
-  </app-pagination>
+    <!-- Pagination -->
+    <app-pagination [currentPage]="pageNumber" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
 </div>
 
 <!-- Add/Edit User Modal -->
 <div class="modal fade" id="addEditUserModal" tabindex="-1" aria-labelledby="addEditUserModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
         <div class="modal-header">
@@ -136,10 +138,10 @@
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+          <button type="submit" class="btn btn-primary fw-semibold rounded-3" [disabled]="userForm.invalid">
             {{ isEditMode ? translate('userManagement.update') : translate('userManagement.create') }}
           </button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-secondary fw-semibold rounded-3" data-bs-dismiss="modal">
             {{ translate('userManagement.cancel') }}
           </button>
         </div>
