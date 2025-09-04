@@ -1,13 +1,13 @@
 <!-- Main Content -->
 <div class="container-fluid py-4 px-4">
-  <h1>{{t('dashboard.welcome')}}, {{ username }}</h1>
+  <h1>{{translate('dashboard.welcome')}}, {{ username }}</h1>
   <p>
     {{
     getRole === 'Admin'
-    ? t('dashboard.adminMessage')
+    ? translate('dashboard.adminMessage')
     : getRole === 'User'
-    ? t('dashboard.userMessage')
-    : t('dashboard.readOnlyMessage')
+    ? translate('dashboard.userMessage')
+    : translate('dashboard.readOnlyMessage')
     }}
   </p>
 
@@ -15,7 +15,7 @@
     <div class="col-md-4 mb-4">
       <div class="card text-white bg-primary">
         <div class="card-body">
-          <h5 class="card-title"><i class="bi bi-people-fill fs-1"></i>&nbsp;&nbsp;Total Users</h5>
+          <h5 class="card-title"><i class="bi bi-people-fill fs-1"></i>&nbsp;&nbsp;{{translate('dashboard.totalUsers')}}</h5>
           <p class="card-text">{{dashboardCount?.totalUsers}}</p>
 
         </div>
@@ -24,7 +24,7 @@
     <div class="col-md-4 mb-4">
       <div class="card text-white bg-success">
         <div class="card-body">
-          <h5 class="card-title"><i class="bi bi-person-check-fill fs-1"></i>&nbsp;&nbsp;Active Users</h5>
+          <h5 class="card-title"><i class="bi bi-person-check-fill fs-1"></i>&nbsp;&nbsp;{{translate('dashboard.activeUsers')}}</h5>
           <p class="card-text">{{dashboardCount?.activeUsers}}</p>
 
         </div>
@@ -33,7 +33,7 @@
     <div class="col-md-4 mb-4">
       <div class="card text-white bg-danger">
         <div class="card-body">
-          <h5 class="card-title"> <i class="bi bi-person-x-fill fs-1"></i>&nbsp;&nbsp;Delete Users</h5>
+          <h5 class="card-title"> <i class="bi bi-person-x-fill fs-1"></i>&nbsp;&nbsp;{{translate('dashboard.deleteUsers')}}</h5>
           <p class="card-text">{{dashboardCount?.deleteUsers}}</p>
 
         </div>

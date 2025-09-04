@@ -21,7 +21,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './user-management.component.scss',
 })
 export class UserManagementComponent {
-  private  readonly _userService = inject(UserService);
+  private readonly _userService = inject(UserService);
   private readonly _toast = inject(ToastService);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly language = inject(LanguageService);
@@ -50,12 +50,13 @@ export class UserManagementComponent {
     this.initForm();
     this.loadUsers();
     this.loadRoles();
-     const token = this._authService.getDecodedToken();
-  this.currentUsername = token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+    const token = this._authService.getDecodedToken();
+    this.currentUsername = token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
   }
 
   initForm(user: any = null) {
     this.userForm = this._formBuilder.group({
+      id: [user?.id ?? null],
       username: [
         { value: user?.username || '', disabled: this.accessRole !== 'Admin' },
         Validators.required,
@@ -82,7 +83,7 @@ export class UserManagementComponent {
     });
   }
 
-  get isCurrentUser():boolean {
+  get isCurrentUser(): boolean {
     const isCurrent = false;
     this.users.forEach(u => {
 
@@ -184,8 +185,11 @@ export class UserManagementComponent {
       this._userService.createUser(formValue).subscribe({
         next: () =>
           this.afterSave(this.translate('userManagement.userCreated')),
-        error: () =>
-          this.toastError(this.translate('userManagement.creationFailed')),
+        error: (err) => {
+          const errorMessage =
+            err?.error?.title || this.translate('userManagement.creationFailed');
+          this.toastError(errorMessage);
+        },
       });
     }
   }
@@ -240,7 +244,7 @@ export class UserManagementComponent {
   }
 
   canEditUser(user: any): boolean {
-  return user.username !== this.currentUsername;
-}
+    return user.username !== this.currentUsername;
+  }
 }
 declare var bootstrap: any;

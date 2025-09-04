@@ -42,7 +42,7 @@ export class DashboardComponent {
     this._router.navigate(['/']);
   }
 
-  get t() {
+  get translate() {
     return this.language.translate.bind(this.language);
   }
 }
