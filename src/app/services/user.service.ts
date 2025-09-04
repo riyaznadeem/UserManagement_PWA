@@ -32,4 +32,8 @@ export class UserService {
   deleteUser(id: string) {
     return this._http.delete(`${this._baseUrl}/Delete/${id}`);
   }
+
+    getDashboard() {
+    return this._http.get<any>(`${environment.apiUrl}/api/Dashboard/GetDashboard`);
+  }
 }

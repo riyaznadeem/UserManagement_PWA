@@ -1,12 +1,40 @@
-<div class="container mt-5" style="text-align: center;">
+<!-- Main Content -->
+<div class="container-fluid py-4 px-4">
   <h1>{{t('dashboard.welcome')}}, {{ username }}</h1>
   <p>
-  {{
+    {{
     getRole === 'Admin'
-      ? t('dashboard.adminMessage')
-      : getRole === 'User'
-      ? t('dashboard.userMessage')
-      : t('dashboard.readOnlyMessage')
-  }}
-</p>
+    ? t('dashboard.adminMessage')
+    : getRole === 'User'
+    ? t('dashboard.userMessage')
+    : t('dashboard.readOnlyMessage')
+    }}
+  </p>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <p class="card-text">{{dashboardCount?.totalUsers}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">Active Users</h5>
+          <p class="card-text">{{dashboardCount?.activeUsers}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card text-white bg-danger">
+        <div class="card-body">
+          <h5 class="card-title">Delete Users</h5>
+          <p class="card-text">{{dashboardCount?.deleteUsers}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

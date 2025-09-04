@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { LanguageService } from '../../services/language.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,14 +17,22 @@ import { LanguageService } from '../../services/language.service';
 export class DashboardComponent {
   username: string = '';
   private readonly _authService = inject(AuthService);
+  private readonly _userService = inject(UserService);
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
   private readonly language = inject(LanguageService);
   public getRole = localStorage.getItem('role');
+  public dashboardCount: any;
 
   constructor() {
     const decoded = this._authService.getDecodedToken();
     this.username = decoded?.DisplayName || 'Unknown';
+  }
+
+  ngOnInit() {
+    this._userService.getDashboard().subscribe((res) => {
+      this.dashboardCount = res;
+    });
   }
 
   logout() {
