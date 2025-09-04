@@ -55,9 +55,9 @@ CRUD Operations: Create, read, update, delete users.
 
 Secure Operations: Access is restricted to authorized roles (e.g., admin).
 
-User Data Management: Includes fields like username, email, role, and possibly token management.
+User Data Management: Includes fields like username, role, and possibly token management.
 
-7. Multilingual Support
+1. Multilingual Support
 
 Language Translation Service:
 

@@ -10,25 +10,28 @@ import {
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { LanguageService } from '../../services/language.service';
+import { PaginationComponent } from "../../shared/pagination/pagination.component";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PaginationComponent],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
 })
 export class UserManagementComponent {
-  private readonly _userService = inject(UserService);
+  private  readonly _userService = inject(UserService);
   private readonly _toast = inject(ToastService);
   private readonly _formBuilder = inject(FormBuilder);
   private readonly language = inject(LanguageService);
+  public readonly _authService = inject(AuthService);
 
   users: any[] = [];
   roles: any[] = [];
   userForm!: FormGroup;
   isEditMode = false;
-
+  currentUsername!: string;
   pageNumber = 1;
   pageSize = 10;
   totalCount = 0;
@@ -47,6 +50,8 @@ export class UserManagementComponent {
     this.initForm();
     this.loadUsers();
     this.loadRoles();
+     const token = this._authService.getDecodedToken();
+  this.currentUsername = token['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
   }
 
   initForm(user: any = null) {
@@ -75,6 +80,14 @@ export class UserManagementComponent {
           classname: 'bg-danger text-light',
         }),
     });
+  }
+
+  get isCurrentUser():boolean {
+    const isCurrent = false;
+    this.users.forEach(u => {
+
+    })
+    return true;
   }
 
   loadUsers() {
@@ -225,5 +238,9 @@ export class UserManagementComponent {
   get translate() {
     return this.language.translate.bind(this.language);
   }
+
+  canEditUser(user: any): boolean {
+  return user.username !== this.currentUsername;
+}
 }
 declare var bootstrap: any;

@@ -1,0 +1,25 @@
+<nav aria-label="Pagination">
+  <ul class="pagination justify-content-end">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <a class="page-link" (click)="onPageChange(currentPage - 1)">
+        {{ translate('userManagement.previous') }}
+      </a>
+    </li>
+
+    <li
+      class="page-item"
+      *ngFor="let page of totalPages"
+      [class.active]="currentPage === page"
+    >
+      <a class="page-link" (click)="onPageChange(page)">
+        {{ page }}
+      </a>
+    </li>
+
+    <li class="page-item" [class.disabled]="currentPage === totalPages.length">
+      <a class="page-link" (click)="onPageChange(currentPage + 1)">
+        {{ translate('userManagement.next') }}
+      </a>
+    </li>
+  </ul>
+</nav>

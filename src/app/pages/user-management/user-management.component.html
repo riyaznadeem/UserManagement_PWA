@@ -4,13 +4,8 @@
   <div class="row mb-3">
     <!-- Search Input -->
     <div class="col-md-4">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="{{ translate('userManagement.searchPlaceholder') }}"
-        [(ngModel)]="searchTerm"
-        (keyup.enter)="onSearch()"
-      />
+      <input type="text" class="form-control" placeholder="{{ translate('userManagement.searchPlaceholder') }}"
+        [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" />
     </div>
 
     <!-- Role Filter -->
@@ -30,13 +25,8 @@
 
     <!-- Add Button (Admin Only) -->
     <div class="col-md-2" *ngIf="accessRole === 'Admin'">
-      <button
-        type="button"
-        class="btn btn-success w-100"
-        data-bs-toggle="modal"
-        data-bs-target="#addEditUserModal"
-        (click)="openAddUser()"
-      >
+      <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#addEditUserModal"
+        (click)="openAddUser()">
         {{ translate('userManagement.addUser') }}
       </button>
     </div>
@@ -48,27 +38,18 @@
       <tr>
         <th (click)="onSort('Username')" style="cursor:pointer">
           {{ translate('userManagement.username') }}
-          <i
-            class="bi"
-            *ngIf="sortBy === 'Username'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"
-          ></i>
+          <i class="bi" *ngIf="sortBy === 'Username'"
+            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
         </th>
         <th (click)="onSort('DisplayName')" style="cursor:pointer">
           {{ translate('userManagement.displayName') }}
-          <i
-            class="bi"
-            *ngIf="sortBy === 'DisplayName'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"
-          ></i>
+          <i class="bi" *ngIf="sortBy === 'DisplayName'"
+            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
         </th>
         <th (click)="onSort('RoleName')" style="cursor:pointer">
           {{ translate('userManagement.role') }}
-          <i
-            class="bi"
-            *ngIf="sortBy === 'RoleName'"
-            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"
-          ></i>
+          <i class="bi" *ngIf="sortBy === 'RoleName'"
+            [ngClass]="sortDirection === 'asc' ? 'bi-caret-up-fill' : 'bi-caret-down-fill'"></i>
         </th>
         <th *ngIf="accessRole === 'Admin' || accessRole === 'User'">{{ translate('userManagement.action') }}</th>
       </tr>
@@ -80,23 +61,19 @@
         <td>{{ user.roleName }}</td>
         <td *ngIf="accessRole === 'Admin' || accessRole === 'User'">
           <!-- Edit Button -->
-          <button
-            class="btn btn-sm btn-info me-2"
-            data-bs-toggle="modal"
-            data-bs-target="#addEditUserModal"
-            (click)="openEditUser(user)"
-            title="{{ translate('userManagement.edit') }}"
-          >
-            <i class="bi bi-pencil-fill"></i> {{ translate('userManagement.edit') }}
-          </button>
+          <span class="d-inline-block" tabindex="0" style="pointer-events: auto;"
+            [attr.title]="!canEditUser(user) ? translate('userManagement.cannotEditSelf') : translate('userManagement.edit')">
+            <button [disabled]="!canEditUser(user)" class="btn btn-sm btn-info me-2" data-bs-toggle="modal"
+              data-bs-target="#addEditUserModal" (click)="openEditUser(user)"
+              [ngStyle]="{ 'pointer-events': canEditUser(user) ? 'auto' : 'none' }">
+              <i class="bi bi-pencil-fill"></i> {{ translate('userManagement.edit') }}
+            </button>
+          </span>
 
+          &nbsp;&nbsp;
           <!-- Delete Button (Admin Only) -->
-          <button
-            *ngIf="accessRole === 'Admin'"
-            class="btn btn-sm btn-danger"
-            (click)="confirmDeleteUser(user)"
-            title="{{ translate('userManagement.delete') }}"
-          >
+          <button *ngIf="accessRole === 'Admin'" class="btn btn-sm btn-danger" (click)="confirmDeleteUser(user)"
+            title="{{ translate('userManagement.delete') }}">
             <i class="bi bi-trash-fill"></i> {{ translate('userManagement.delete') }}
           </button>
         </td>
@@ -105,41 +82,16 @@
   </table>
 
   <!-- Pagination -->
-  <nav aria-label="User pagination">
-    <ul class="pagination justify-content-end">
-      <li class="page-item" [class.disabled]="pageNumber === 1">
-        <a class="page-link" (click)="onPageChange(pageNumber - 1)">
-          {{ translate('userManagement.previous') }}
-        </a>
-      </li>
-      <li
-        class="page-item"
-        *ngFor="let page of totalPages"
-        [class.active]="pageNumber === page"
-      >
-        <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
-      </li>
-      <li class="page-item" [class.disabled]="pageNumber === totalPages.length">
-        <a class="page-link" (click)="onPageChange(pageNumber + 1)">
-          {{ translate('userManagement.next') }}
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <app-pagination [currentPage]="pageNumber" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+  </app-pagination>
 </div>
 
 <!-- Add/Edit User Modal -->
-<div
-  class="modal fade"
-  id="addEditUserModal"
-  tabindex="-1"
-  aria-labelledby="addEditUserModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="addEditUserModal" tabindex="-1" aria-labelledby="addEditUserModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form [formGroup]="userForm" (ngSubmit)="saveUser()">
-              <div class="modal-header">
+        <div class="modal-header">
           <h5 class="modal-title" id="addEditUserModalLabel">
             {{ isEditMode ? translate('userManagement.update') : translate('userManagement.create') }}
           </h5>
@@ -149,10 +101,7 @@
           <div class="mb-3">
             <label class="form-label">{{ translate('userManagement.username') }}</label>
             <input type="text" class="form-control" formControlName="username" />
-            <div
-              *ngIf="userForm.get('username')?.touched && userForm.get('username')?.invalid"
-              class="text-danger"
-            >
+            <div *ngIf="userForm.get('username')?.touched && userForm.get('username')?.invalid" class="text-danger">
               {{ translate('userManagement.usernameRequired') }}
             </div>
           </div>
@@ -160,10 +109,8 @@
           <div class="mb-3">
             <label class="form-label">{{ translate('userManagement.displayName') }}</label>
             <input type="text" class="form-control" formControlName="displayName" />
-            <div
-              *ngIf="userForm.get('displayName')?.touched && userForm.get('displayName')?.invalid"
-              class="text-danger"
-            >
+            <div *ngIf="userForm.get('displayName')?.touched && userForm.get('displayName')?.invalid"
+              class="text-danger">
               {{ translate('userManagement.displayNameRequired') }}
             </div>
           </div>
@@ -171,10 +118,7 @@
           <div class="mb-3" *ngIf="!isEditMode">
             <label class="form-label">{{ translate('userManagement.password') }}</label>
             <input type="password" class="form-control" formControlName="password" />
-            <div
-              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid"
-              class="text-danger"
-            >
+            <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid" class="text-danger">
               {{ translate('userManagement.passwordRequired') }}
             </div>
           </div>
@@ -185,10 +129,7 @@
               <option [value]="''">{{ translate('userManagement.selectRole') }}</option>
               <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
             </select>
-            <div
-              *ngIf="userForm.get('roleId')?.touched && userForm.get('roleId')?.invalid"
-              class="text-danger"
-            >
+            <div *ngIf="userForm.get('roleId')?.touched && userForm.get('roleId')?.invalid" class="text-danger">
               {{ translate('userManagement.roleRequired') }}
             </div>
           </div>
